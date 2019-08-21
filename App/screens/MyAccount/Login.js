@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
-import { Image, Button } from "react-native-elements";
+import { Image, Button, Divider, SocialIcon } from "react-native-elements";
 import Toast, { DURATION } from "react-native-easy-toast";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -9,7 +9,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import t from "tcomb-form-native";
 const Form = t.form.Form;
 import { LoginStruct, LoginOptions } from "../../forms/Login";
-import { firebaseLogIn } from "../../utils/FireBase";
+import {
+  firebaseLogIn,
+  firebaseFacebookLogIn,
+  firebaseGoogleLogIn
+} from "../../utils/FireBase";
 
 //Firebase Function
 
@@ -25,6 +29,7 @@ export default function LoginScreen(props) {
   const toast = useRef("");
 
   const { navigation } = props;
+  const { navigate } = props.navigation;
 
   const login = () => {
     const validate = loginForm.current.getValue();
@@ -61,7 +66,27 @@ export default function LoginScreen(props) {
             buttonStyle={styles.buttonLogin}
           />
         </View>
+        <Text style={styles.textRegister}>
+          ¿Aún no tienes una cuenta? {" "}
+          <Text style={styles.btnRegister} onPress={() => navigate("Register")}>
+            Regístrate
+          </Text>
+        </Text>
         <Text style={styles.errorStyle}>{error}</Text>
+        <Divider style={styles.divider} />
+        <SocialIcon
+          title="Iniciar Sesión con Facebook"
+          button
+          type="facebook"
+          onPress={() => firebaseFacebookLogIn(navigation, toast)}
+        />
+        <SocialIcon
+          title="Iniciar Sesión con Google"
+          button
+          type="google-plus"
+          style={styles.googleButton}
+          onPress={() => firebaseGoogleLogIn(navigation, toast)}
+        />
         <Toast
           ref={toast}
           position="bottom"
@@ -79,19 +104,19 @@ export default function LoginScreen(props) {
 const styles = StyleSheet.create({
   viewBody: {
     flex: 1,
-    marginLeft: 40,
-    marginRight: 40,
+    marginLeft: 30,
+    marginRight: 30,
     marginTop: 40
   },
   containerLogo: {
     alignItems: "center"
   },
   logo: {
-    width: 200,
-    height: 180
+    width: 150,
+    height: 150
   },
   viewForm: {
-    marginTop: 55
+    marginTop: 30
   },
   buttonLogin: {
     backgroundColor: "#00a680",
@@ -103,6 +128,25 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 30,
+    marginBottom: 20,
     fontSize: 20
+  },
+  divider: {
+    backgroundColor: "#00a680",
+    marginBottom: 20
+  },
+  googleButton: {
+    backgroundColor: "#df4a32"
+  },
+  textRegister: {
+    marginTop: 15,
+    marginLeft: 10,
+    marginRight: 10,
+    fontSize: 16,
+    textAlign: "center"
+  },
+  btnRegister: {
+    color: "#00a680",
+    fontWeight: "bold",
   }
 });

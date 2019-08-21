@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-elements";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { Button, Text, Image } from "react-native-elements";
 import Toast, { DURATION } from "react-native-easy-toast";
+
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 //Formulario
 import t from "tcomb-form-native";
@@ -47,30 +49,39 @@ export default function RegisterScreen(props) {
   };
 
   return (
-    <View style={styles.viewBody}>
-      <Form
-        ref={registerForm}
-        type={RegisterStruct}
-        options={RegisterOptions}
-        value={userInfo}
-        onChange={text => setUserInfo(text)}
-      />
-      <Button
-        title="Unirse"
-        onPress={registerV}
-        buttonStyle={styles.buttonRegister}
-      />
-      <Text style={styles.errorStyle}>{error}</Text>
-      <Toast
-        ref={toast}
-        position="bottom"
-        positionValue={250}
-        fadeInDuration={850}
-        fadeOutDuration={1000}
-        opacity={0.8}
-        textStyle={{ color: "white" }}
-      />
-    </View>
+    <KeyboardAwareScrollView>
+      <View style={styles.viewBody}>
+        <Image
+          source={require("../../../assets/img/5-tenedores-logo.png")}
+          style={styles.logo}
+          PlaceholderContent={<ActivityIndicator />}
+          resizeMode="contain"
+          containerStyle={styles.containerLogo}
+        />
+        <Form
+          ref={registerForm}
+          type={RegisterStruct}
+          options={RegisterOptions}
+          value={userInfo}
+          onChange={text => setUserInfo(text)}
+        />
+        <Button
+          title="Unirse"
+          onPress={registerV}
+          buttonStyle={styles.buttonRegister}
+        />
+        <Text style={styles.errorStyle}>{error}</Text>
+        <Toast
+          ref={toast}
+          position="bottom"
+          positionValue={250}
+          fadeInDuration={850}
+          fadeOutDuration={1000}
+          opacity={0.8}
+          textStyle={{ color: "white" }}
+        />
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -79,7 +90,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginRight: 40,
-    marginLeft: 40
+    marginLeft: 40,
+    marginTop: 15
   },
   buttonRegister: {
     backgroundColor: "#00a680",
@@ -92,5 +104,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 30,
     fontSize: 20
+  },
+  logo: {
+    width: 150,
+    height: 150
+  },
+  containerLogo: {
+    alignItems: "center",
+    marginBottom: 25
   }
 });

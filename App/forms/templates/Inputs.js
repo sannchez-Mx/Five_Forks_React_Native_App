@@ -36,7 +36,7 @@ export default (InputTemplate = locals => {
 
 const styles = StyleSheet.create({
   viewContainer: {
-    marginTop: 12,
+    marginTop: 10,
     marginBottom: 12
   }
 });

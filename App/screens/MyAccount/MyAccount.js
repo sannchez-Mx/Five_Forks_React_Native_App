@@ -2,6 +2,10 @@ import React, { useEffect, useState, Fragment } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Button } from "react-native-elements";
 
+//Components
+import MyAccountGuest from "../../components/MyAccount/MyAccountGuest";
+import MyAccountUser from '../../components/MyAccount/MyAccountUser';
+
 //Firebase function
 import { firebaseAuthState } from "../../utils/FireBase";
 
@@ -21,13 +25,9 @@ export default function MyAccount(props) {
   return (
     <Fragment>
       {isLogin ? (
-        <Text>Bienvenido</Text>
+        <MyAccountUser/>
       ) : (
-        <View style={styles.viewBody}>
-          <Text>MyAccount Screen</Text>
-          <Button title="Registro" onPress={() => goToScreen("Register")} />
-          <Button title="Login" onPress={() => goToScreen("Login")} />
-        </View>
+        <MyAccountGuest goToScreen={goToScreen} />
       )}
     </Fragment>
   );

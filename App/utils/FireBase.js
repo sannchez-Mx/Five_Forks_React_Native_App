@@ -1,5 +1,14 @@
 import firebase from "firebase";
+import "firebase/auth";
 import "firebase/firestore";
+
+//Facebook Log In
+import { FacebookApi } from "./Social";
+import * as Facebook from "expo-facebook";
+
+//Google Log In
+import { GoogleApi } from "./Social";
+import * as Google from "expo-google-app-auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -49,10 +58,75 @@ export const firebaseLogIn = (email, password, toast, navigation) => {
 
 //Firebase estado de login
 export const firebaseAuthState = setIsLogin => {
-         firebase.auth().onAuthStateChanged(user => {
-           user ? setIsLogin(true) : setIsLogin(false)
-         });
-       };
+  firebase.auth().onAuthStateChanged(user => {
+    user ? setIsLogin(true) : setIsLogin(false);
+  });
+};
+
+//Firebase LogOut
+export const firebaseLogOut = () => {
+  firebase.auth().signOut();
+};
+
+//Firebase Facebook LogIn
+export const firebaseFacebookLogIn = async (navigation, toast) => {
+  const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+    FacebookApi.application_id,
+    { permissions: FacebookApi.permissions }
+  );
+
+  if (type === "success") {
+    const credentials = firebase.auth.FacebookAuthProvider.credential(token);
+    firebase
+      .auth()
+      .signInWithCredential(credentials)
+      .then(res => {
+        toast.current.show(`Bienvenido ${res.user.displayName}`, 200, () => {
+          navigation.goBack();
+        });
+      })
+      .catch(err => {
+        err.code === "auth/account-exists-with-different-credential"
+          ? toast.current.show("La cuenta ya existe", 200)
+          : err.code;
+      });
+  } else if (type === "cancel") {
+    toast.current.show("Inicio de Sesión Cancelado", 400);
+  } else {
+    toast.current.show("Error Desconocido, Intentelo más Tarde", 400);
+  }
+};
+
+//Firebase Google Log In
+export const firebaseGoogleLogIn = async (navigation, toast) => {
+  const { type, idToken } = await Google.logInAsync(GoogleApi);
+
+  if (type === "success") {
+    const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+    firebase
+      .auth()
+      .signInWithCredential(credential)
+      .then(res => {
+        toast.current.show(`Bienvenido ${res.user.displayName}`, 200, () => {
+          navigation.goBack();
+        });
+      })
+      .catch(err => {
+        console.log("Google err", err.code);
+        console.log("Google err", err.message);
+      });
+  } else if (type === "cancel") {
+    toast.current.show("Inicio de Sesión Cancelado", 400);
+  } else {
+    toast.current.show("Error Desconocido, Intentelo más Tarde", 400);
+  }
+};
+
+//Firebase User Status
+export const firebaseUserStatus = async setUserInfo => {
+  const user = firebase.auth().currentUser;
+  await user.providerData.forEach(value => setUserInfo(value));
+};
 
 // FIREBASE INITIALIZE AND REFS
 let firestore = firebase.firestore();
