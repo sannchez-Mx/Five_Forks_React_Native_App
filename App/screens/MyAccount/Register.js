@@ -49,7 +49,7 @@ export default function RegisterScreen(props) {
   };
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView enableAutomaticScroll={true}>
       <View style={styles.viewBody}>
         <Image
           source={require("../../../assets/img/5-tenedores-logo.png")}

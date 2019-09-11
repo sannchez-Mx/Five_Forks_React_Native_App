@@ -128,6 +128,11 @@ export const firebaseUserStatus = async setUserInfo => {
   await user.providerData.forEach(value => setUserInfo(value));
 };
 
+//Firebase Update User
+export const firebaseUpdateUser = async info => {
+  await firebase.auth().currentUser.updateProfile(info);
+};
+
 // FIREBASE INITIALIZE AND REFS
 let firestore = firebase.firestore();
 export let firestoreCollection = firestore.collection("users");

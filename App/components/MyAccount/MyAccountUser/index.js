@@ -1,6 +1,6 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-elements";
 
 //Components
 import UserInfo from "./UserInfo";
@@ -9,18 +9,11 @@ import UserInfo from "./UserInfo";
 import { firebaseLogOut } from "../../../utils/FireBase";
 
 export default function MyAccountUser() {
-    return (
-      <View style={styles.viewBody}>
-          <UserInfo/>
-      </View>
-    );
+  return (
+    <View>
+      <UserInfo />
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({
-  viewBody: {
-    flex: 1,
-    alignItems: "center",
-    paddingLeft: 30,
-    paddingRight: 30,
-  }
-});
+const styles = StyleSheet.create({});
