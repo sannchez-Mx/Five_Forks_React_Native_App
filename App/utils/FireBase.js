@@ -123,14 +123,14 @@ export const firebaseGoogleLogIn = async (navigation, toast) => {
 };
 
 //Firebase User Status
-export const firebaseUserStatus = async setUserInfo => {
+export const firebaseUserStatus = setUserInfo => {
   const user = firebase.auth().currentUser;
-  await user.providerData.forEach(value => setUserInfo(value));
+  user.providerData.forEach(value => setUserInfo(value));
 };
 
 //Firebase Update User
-export const firebaseUpdateUser = async info => {
-  await firebase.auth().currentUser.updateProfile(info);
+export const firebaseUpdateUser = async update => {
+  await firebase.auth().currentUser.updateProfile(update);
 };
 
 // FIREBASE INITIALIZE AND REFS

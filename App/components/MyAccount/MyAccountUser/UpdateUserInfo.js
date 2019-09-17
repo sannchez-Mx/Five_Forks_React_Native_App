@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { ListItem } from "react-native-elements";
 
-//Overlay
+//Overlays
 import OverlayOneInput from "../../Elements/OverlayOneInput";
+import OverlayTwoInput from "../../Elements/OverlayTwoInput";
 
 //Firebase Functions
 import { firebaseUserStatus } from "../../../utils/FireBase";
 
-export default function UpdateUserInfo({ userInfo, updateUser }) {
+export default function UpdateUserInfo({
+  userInfo,
+  updateUser,
+  updateUserEmail
+}) {
   const [menuItems, setMenuItems] = useState([
     {
       title: "Cambiar Nombre y Apellido",
@@ -31,7 +36,13 @@ export default function UpdateUserInfo({ userInfo, updateUser }) {
       iconColorRight: "#ccc",
       iconNameLeft: "at",
       iconColorLeft: "#ccc",
-      onPress: () => console.log("click")
+      onPress: () =>
+        openOverlayTwoInputs(
+          "Email",
+          "Password",
+          updateUserDisplayEmail,
+          userInfo.email
+        )
     },
     {
       title: "Cambiar Contraseña",
@@ -64,6 +75,32 @@ export default function UpdateUserInfo({ userInfo, updateUser }) {
       updateUser(newName);
     }
     setOverlayComponent(null);
+  };
+
+  const updateUserDisplayEmail = async (newEmail, password) => {
+    const { email } = userInfo;
+    if (email != newEmail) {
+      updateUserEmail(newEmail, password);
+    }
+    setOverlayComponent(null);
+  };
+
+  const openOverlayTwoInputs = (
+    placeholder,
+    placeholderTwo,
+    updateFunction,
+    inputValueOne
+  ) => {
+    setOverlayComponent(
+      <OverlayTwoInput
+        isVisibleOverlay={true}
+        placeholder={placeholder}
+        placeholderTwo={placeholderTwo}
+        inputValueOne={inputValueOne}
+        inputValueTwo=""
+        updateFunction={updateFunction}
+      />
+    );
   };
 
   return (

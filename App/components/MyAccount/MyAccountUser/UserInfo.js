@@ -6,6 +6,7 @@ import { Avatar, Button } from "react-native-elements";
 import UpdateUserInfo from "./UpdateUserInfo";
 
 //Firebase Funtions
+import * as firebase from "firebase";
 import {
   firebaseUserStatus,
   firebaseLogOut,
@@ -17,19 +18,31 @@ export default function UserInfo() {
 
   useEffect(() => {
     firebaseUserStatus(setUserInfo);
-  }, [setUserInfo]);
-  
-  const returnUserInfo = userInfo => {
-    if (userInfo.hasOwnProperty("uid")) {
-      return <UpdateUserInfo updateUser={updateUser} userInfo={userInfo} />;
-    }
-  };
+  });
 
   const updateUser = async newName => {
     const update = {
       displayName: newName
     };
     await firebaseUpdateUser(update);
+    setUserInfo({ userInfo });
+  };
+
+  const updateUserEmail = async (newEmail, password) => {
+    console.log(newEmail);
+    console.log(password);
+  };
+
+  const returnUserInfo = userInfo => {
+    if (userInfo.hasOwnProperty("uid")) {
+      return (
+        <UpdateUserInfo
+          updateUser={updateUser}
+          userInfo={userInfo}
+          updateUserEmail={updateUserEmail}
+        />
+      );
+    }
   };
 
   const { displayName, email, photoURL } = userInfo;
