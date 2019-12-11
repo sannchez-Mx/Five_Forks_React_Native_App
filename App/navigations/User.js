@@ -9,20 +9,51 @@ import {
 } from "react-navigation";
 
 //Screens
-import HomeScreen from "../screens/Home";
 import TopFiveScreen from "../screens/TopFive";
 import SearchScreen from "../screens/Search";
+
+//Screens My Account
 import MyAccountScreen from "../screens/MyAccount/MyAccount";
 import RegisterScreen from "../screens/MyAccount/Register";
-import LoginScreen from '../screens/MyAccount/Login';
+import LoginScreen from "../screens/MyAccount/Login";
+
+//Screens Restaurants
+import RestaurantsScreen from "../screens/Restaurants/Restaurants";
+import AddRestaurant from "../screens/Restaurants/AddRestaurant";
+import RestaurantView from "../screens/Restaurants/RestaurantView";
+import AddReviewRestaurant from "../screens/Restaurants/AddReviewRestaurant";
 
 //Stacks de navegación
-const homeScreenStack = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
+const restaurantsScreenStack = createStackNavigator({
+  Restaurants: {
+    screen: RestaurantsScreen,
     navigationOptions: ({ navigation }) => ({
       title: "Home"
     })
+  },
+  AddRestaurant: {
+    screen: AddRestaurant,
+    navigationOptions: ({ navigation }) => ({
+      title: "Nuevo Restaurante"
+    })
+  },
+  Restaurant: {
+    screen: RestaurantView,
+    navigationOptions: ({ navigation }) => {
+      const { name } = navigation.state.params.restaurant.item.restaurant;
+      return {
+        title: name
+      };
+    }
+  },
+  AddReview: {
+    screen: AddReviewRestaurant,
+    navigationOptions: ({ navigation }) => {
+      const { name } = navigation.state.params;
+      return {
+        title: name
+      };
+    }
   }
 });
 
@@ -30,7 +61,7 @@ const topFiveScreenStack = createStackNavigator({
   TopFive: {
     screen: TopFiveScreen,
     navigationOptions: ({ navigation }) => ({
-      title: "Top 5"
+      title: "Top-Ten"
     })
   }
 });
@@ -68,8 +99,8 @@ const myAccountScreenStack = createStackNavigator({
 //Root stack
 const RootStack = createBottomTabNavigator(
   {
-    Home: {
-      screen: homeScreenStack,
+    Restaurants: {
+      screen: restaurantsScreenStack,
       navigationOptions: ({ navigation }) => ({
         tabBarLabel: "Home",
         tabBarIcon: ({ tintColor }) => (
@@ -85,7 +116,7 @@ const RootStack = createBottomTabNavigator(
     TopFive: {
       screen: topFiveScreenStack,
       navigationOptions: ({ navigation }) => ({
-        tabBarLabel: "Top 5",
+        tabBarLabel: "Top 10",
         tabBarIcon: ({ tintColor }) => (
           <Icon
             name="star-outline"
@@ -127,8 +158,8 @@ const RootStack = createBottomTabNavigator(
   },
   //Configuraciones adicionales
   {
-    initialRouteName: "MyAccount", // <-- Ruta principal
-    order: ["Home", "TopFive", "Search", "MyAccount"], // <-- Orden para la navegación
+    initialRouteName: "Restaurants", // <-- Ruta principal
+    order: ["Restaurants", "TopFive", "Search", "MyAccount"], // <-- Orden para la navegación
     tabBarOptions: {
       inactiveTintColor: "#646464",
       activeTintColor: "#00a680"

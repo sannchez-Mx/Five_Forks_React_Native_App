@@ -2,18 +2,25 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Overlay, Input, Button, Icon } from "react-native-elements";
 
-export default function OverlayOneInput({
+export default function OverlayThreeInput({
   isVisibleOverlay,
   placeholder,
-  inputValue,
+  placeholderTwo,
+  placeholderThree,
+  inputValueOne,
+  inputValueTwo,
+  inputValueThree,
+  isPassword,
   updateFunction
 }) {
   const [visible, setVisible] = useState(isVisibleOverlay);
 
-  const [inputData, setInputData] = useState(inputValue);
+  const [inputData, setInputData] = useState(inputValueOne);
+  const [inputDataTwo, setInputDataTwo] = useState(inputValueTwo);
+  const [inputDataThree, setInputDataThree] = useState(inputValueTwo);
 
   const update = () => {
-    updateFunction(inputData);
+    updateFunction(inputData, inputDataTwo, inputDataThree);
     setVisible(false);
   };
 
@@ -35,10 +42,28 @@ export default function OverlayOneInput({
           containerStyle={styles.inputContainer}
           placeholder={placeholder}
           value={inputData}
+          password={isPassword}
+          secureTextEntry={isPassword}
+        />
+        <Input
+          onChangeText={text => setInputDataTwo(text)}
+          containerStyle={styles.inputContainer}
+          placeholder={placeholderTwo}
+          value={inputDataTwo}
+          password={isPassword}
+          secureTextEntry={isPassword}
+        />
+        <Input
+          onChangeText={text => setInputDataThree(text)}
+          containerStyle={styles.inputContainer}
+          placeholder={placeholderThree}
+          value={inputDataThree}
+          password={isPassword}
+          secureTextEntry={isPassword}
         />
         <Button
           buttonStyle={styles.buttonStyle}
-          title="Actualizar"
+          title="Cambiar Contraseña"
           onPress={() => update()}
         />
         <Icon

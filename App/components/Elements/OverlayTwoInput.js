@@ -8,6 +8,7 @@ export default function OverlayTwoInput({
   placeholderTwo,
   inputValueOne,
   inputValueTwo,
+  isPassword,
   updateFunction
 }) {
   const [visible, setVisible] = useState(isVisibleOverlay);
@@ -22,11 +23,12 @@ export default function OverlayTwoInput({
 
   const close = () => {
     setVisible(false);
-    updateFunction(null)
+    updateFunction(null);
   };
-    
+
   return (
     <Overlay
+      fullScreen={true}
       isVisible={isVisibleOverlay}
       overlayBackgroundColor="trasparent"
       overlayStyle={styles.overlayStyle}
@@ -43,6 +45,8 @@ export default function OverlayTwoInput({
           containerStyle={styles.inputContainer}
           placeholder={placeholderTwo}
           value={inputDataTwo}
+          password={isPassword}
+          secureTextEntry={isPassword}
         />
         <Button
           buttonStyle={styles.buttonStyle}

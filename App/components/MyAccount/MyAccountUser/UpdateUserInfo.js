@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { ListItem } from "react-native-elements";
+import Toast, { DURATION } from "react-native-easy-toast";
 
 //Overlays
 import OverlayOneInput from "../../Elements/OverlayOneInput";
 import OverlayTwoInput from "../../Elements/OverlayTwoInput";
+import OverlayThreeInput from "../../Elements/OverlayThreeInput";
 
 //Firebase Functions
 import { firebaseUserStatus } from "../../../utils/FireBase";
@@ -12,7 +14,8 @@ import { firebaseUserStatus } from "../../../utils/FireBase";
 export default function UpdateUserInfo({
   userInfo,
   updateUser,
-  updateUserEmail
+  updateUserEmail,
+  updateUserPassword
 }) {
   const [menuItems, setMenuItems] = useState([
     {
@@ -51,9 +54,17 @@ export default function UpdateUserInfo({
       iconColorRight: "#ccc",
       iconNameLeft: "lock-reset",
       iconColorLeft: "#ccc",
-      onPress: () => console.log("click")
+      onPress: () =>
+        openOverlayThreeInputs(
+          "Contraseña actual",
+          "Nueva contraseña",
+          "Repite nueva contraseña",
+          updatePassword
+        )
     }
   ]);
+
+  const toast = useRef("");
 
   const [userInfoProp, setUserInfoProp] = useState(userInfo);
 
@@ -79,7 +90,7 @@ export default function UpdateUserInfo({
 
   const updateUserDisplayEmail = async (newEmail, password) => {
     const { email } = userInfo;
-    if (email != newEmail) {
+    if (email != newEmail && password) {
       updateUserEmail(newEmail, password);
     }
     setOverlayComponent(null);
@@ -98,6 +109,52 @@ export default function UpdateUserInfo({
         placeholderTwo={placeholderTwo}
         inputValueOne={inputValueOne}
         inputValueTwo=""
+        isPassword={true}
+        updateFunction={updateFunction}
+      />
+    );
+  };
+
+  const updatePassword = async (
+    currentPassword,
+    newPassword,
+    repeatNewPassword
+  ) => {
+    if (currentPassword && newPassword && repeatNewPassword) {
+      if (newPassword === repeatNewPassword) {
+        if (currentPassword === newPassword) {
+          toast.current.show(
+            "La nueva contraseña no puede ser igual a la actual",
+            400
+          );
+        } else {
+          updateUserPassword(currentPassword, newPassword);
+        }
+      } else {
+        toast.current.show("Las contraseñas no coinciden", 400);
+      }
+    } else {
+      toast.current.show("Todos los campos son requeridos", 400);
+    }
+    setOverlayComponent(null);
+  };
+
+  const openOverlayThreeInputs = (
+    placeholder,
+    placeholderTwo,
+    placeholderThree,
+    updateFunction
+  ) => {
+    setOverlayComponent(
+      <OverlayThreeInput
+        isVisibleOverlay={true}
+        placeholder={placeholder}
+        placeholderTwo={placeholderTwo}
+        placeholderThree={placeholderThree}
+        inputValueOne=""
+        inputValueTwo=""
+        inputValueThree=""
+        isPassword={true}
         updateFunction={updateFunction}
       />
     );
@@ -124,6 +181,16 @@ export default function UpdateUserInfo({
         />
       ))}
       {overlayComponent}
+
+      <Toast
+        ref={toast}
+        position="center"
+        positionValue={260}
+        fadeInDuration={850}
+        fadeOutDuration={1000}
+        opacity={0.8}
+        textStyle={{ color: "white" }}
+      />
     </View>
   );
 }
